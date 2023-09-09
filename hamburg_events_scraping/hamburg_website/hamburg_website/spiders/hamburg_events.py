@@ -30,6 +30,9 @@ class HamburgEventsSpider(scrapy.Spider):
         f'{API_ENDPOINT}?filter%5Bdate%5D%5B0%5D={today()}&filter%5Bdate%5D%5B1%5D={next_week()}&filter%5Bdistance%5D=15&filter%5Bdistrict%5D=hh_all&filter%5Bsearchword%5D=&pageDate={today()}&page={page}'
     ]
 
+    def __init__(self, *args, **kwargs):
+        super(HamburgEventsSpider, self).__init__(*args, **kwargs)
+        self.custom_time = pendulum.now("Europe/Berlin").to_date_string()
 
     def parse(self, response):
         if len(response.css("div.teaserList-inline__page article.listTeaser-event")) == 0 :

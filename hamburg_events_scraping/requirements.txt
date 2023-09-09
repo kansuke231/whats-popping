@@ -1,0 +1,6 @@
+Scrapy
+google-cloud-storage
+boto3
+botocore
+pendulum
+scrapy

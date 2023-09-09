@@ -1,3 +1,5 @@
+import os
+
 # Scrapy settings for hamburg_website project
 #
 # For simplicity, this file contains only settings considered important or
@@ -91,3 +93,13 @@ ROBOTSTXT_OBEY = True
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+
+FEEDS = {
+    "s3://hamburg-events/%(custom_time)s/%(name)s.jsonl": {
+    "format": "jsonlines",
+    }
+}
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')

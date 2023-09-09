@@ -1,6 +1,5 @@
 import scrapy
-from scrapy_splash import SplashRequest
-
+import pendulum
 
 class HamburgMeetupSpider(scrapy.Spider):
     name = "hamburg_meetup"
@@ -11,9 +10,9 @@ class HamburgMeetupSpider(scrapy.Spider):
     ]
 
 
-    def start_requests(self):
-        for url in self.start_urls:
-            yield SplashRequest(url, self.parse, args={'wait': 3})
+    def __init__(self, *args, **kwargs):
+        super(HamburgMeetupSpider, self).__init__(*args, **kwargs)
+        self.custom_time = pendulum.now("Europe/Berlin").to_date_string()
 
     def parse(self, response):
         for event in response.xpath('//div[@data-recommendationid]'):
