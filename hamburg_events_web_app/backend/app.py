@@ -1,16 +1,40 @@
 from flask import Flask, jsonify, send_from_directory
 import json
 import os
-import glob
 from pathlib import Path
+import boto3
 
 
-BACKEND_DIR = Path(__file__).parent
-WEB_APP_DIR = BACKEND_DIR.parent
+WEB_APP_DIR = os.environ.get('WEB_APP_DIR', Path(__file__).parent.parent) 
 app = Flask(__name__, static_folder=os.path.join(WEB_APP_DIR, "frontend/build"))
 
 
-DATA_DIR = "data"  # Assuming the jsonl files are inside a "data" directory
+def get_jsonl_from_s3(bucket_name, date):
+    session = boto3.Session(
+        aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+        aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+    )
+
+    s3 = session.resource('s3')
+    # List the objects within the specified folder
+    bucket = s3.Bucket(bucket_name)
+    objects = bucket.objects.all()
+    
+
+    data_list = []
+
+    for s3_object in [obj for obj in objects if date in obj.key]:
+        obj = s3.Object(bucket_name, s3_object.key)
+        response = obj.get()
+        file_content = response['Body'].read().decode('utf-8')
+        
+        # Split the content by lines and load each line as a JSON
+        for line in file_content.strip().split('\n'):
+            data = json.loads(line)
+            data_list.append(data)
+
+
+    return data_list
 
 
 @app.route('/', defaults={'path': ''})
@@ -24,19 +48,8 @@ def serve(path):
 
 @app.route('/events/<date>', methods=['GET'])
 def get_events(date):
-    filepaths = glob.glob(os.path.join(BACKEND_DIR, DATA_DIR, date, f"*.jsonl"))
-    
-    if not filepaths:
-        return jsonify({"error": "Date not found"}), 404
 
-    combined_events = []
-   
-    for filepath in filepaths:
-        with open(filepath, "r") as f:
-            for line in f:
-                event = json.loads(line)
-                combined_events.append(event)
-
+    combined_events = get_jsonl_from_s3('hamburg-events', date)
     return jsonify(combined_events)
 
 if __name__ == "__main__":

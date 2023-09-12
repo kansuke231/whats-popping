@@ -1,3 +1,2 @@
-Scrapy
-google-cloud-storage
 flask
+boto3
