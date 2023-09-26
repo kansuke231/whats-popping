@@ -5,13 +5,15 @@ import './App.css';
 function App() {
   const [events, setEvents] = useState([]);
 
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL||'http://127.0.0.1:5000';
+
   // Define dateStr outside useEffect so it's accessible in the component
   const today = new Date();
   const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   
   useEffect(() => {
      
-      fetch(`http://127.0.0.1:5000/events/${dateStr}`)
+      fetch(`${BACKEND_URL}/events/${dateStr}`)
           .then(response => response.json())
           .then(data => {
               setEvents(data);

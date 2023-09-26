@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, send_from_directory
+from json import JSONDecodeError
 import json
 import os
 from pathlib import Path
@@ -27,11 +28,13 @@ def get_jsonl_from_s3(bucket_name, date):
         obj = s3.Object(bucket_name, s3_object.key)
         response = obj.get()
         file_content = response['Body'].read().decode('utf-8')
-        
-        # Split the content by lines and load each line as a JSON
-        for line in file_content.strip().split('\n'):
-            data = json.loads(line)
-            data_list.append(data)
+        try:
+            # Split the content by lines and load each line as a JSON
+            for line in file_content.strip().split('\n'):
+                data = json.loads(line)
+                data_list.append(data)
+        except JSONDecodeError:
+            print(f'The s3 object {s3_object.key} seems to be empty.')
 
 
     return data_list
@@ -51,6 +54,7 @@ def get_events(date):
 
     combined_events = get_jsonl_from_s3('hamburg-events', date)
     return jsonify(combined_events)
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
