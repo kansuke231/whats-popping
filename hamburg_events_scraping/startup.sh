@@ -4,3 +4,6 @@ scrapy crawl hamburg_events
 
 cd ../meetup
 scrapy crawl hamburg_meetup
+
+cd ../eventbrite
+scrapy crawl eventbrite
