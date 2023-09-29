@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import './AppOutput.css';
 
+import {Card, CardHeader, CardBody, Image} from "@nextui-org/react";
+import { NextUIProvider } from '@nextui-org/react';
 
 function App() {
   const [events, setEvents] = useState([]);
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL||'http://127.0.0.1:5000';
+  const BACKEND_URL =  process.env.REACT_APP_BACKEND_URL|| 'http://127.0.0.1:5000';
 
   // Define dateStr outside useEffect so it's accessible in the component
   const today = new Date();
@@ -25,30 +27,34 @@ function App() {
 
 
   return (
+    <NextUIProvider>
+      <div className="App">
+        <h1>What's popping in Hamburg today? ({dateStr})</h1>
     
-    <div className="App">
-      <h1>What's popping in Hamburg today? ({dateStr})</h1>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Event Image</th>
-            <th>Title</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
+        <div className="cards-container">
           {events.map((event, index) => (
-            <tr key={index}>
-              <td><img className="thumbnail" src={event.image} alt={event.title}/></td>
-              <td><a href={event.link}>{event.title}</a></td>
-              <td>{event.time}</td>
-            </tr>
+            <Card key={index} className="event-card py-4">
+              <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                <h4 className="font-bold text-large">
+                  <a href={event.link}>{event.title}</a>
+                </h4>
+                <small className="text-default-500">{event.time}</small>
+              </CardHeader>
+              <CardBody className="overflow-visible py-2">
+                <Image
+                  alt="Card background"
+                  className="object-cover rounded-xl"
+                  src={event.image}
+                  width={270}
+                />
+              </CardBody>
+            </Card>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </div>
+      </div>
+    </NextUIProvider>
   );
+  
 }
 
 export default App;
