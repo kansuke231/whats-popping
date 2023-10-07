@@ -41,12 +41,14 @@ function App() {
                 <small className="text-default-500">{event.time}</small>
               </CardHeader>
               <CardBody className="overflow-visible py-2">
-                <Image
-                  alt="Card background"
-                  className="object-cover rounded-xl"
-                  src={event.image}
-                  width={270}
-                />
+                <div className="card-image-container">
+                  <Image
+                    alt="Card background"
+                    className="object-cover rounded-xl"
+                    src={event.image}
+                    width={270}  // You may also consider making the width responsive or in percentage
+                  />
+                </div>
               </CardBody>
             </Card>
           ))}

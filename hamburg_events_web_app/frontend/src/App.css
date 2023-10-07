@@ -15,3 +15,9 @@
   flex-wrap: wrap; /* This allows the cards to wrap to the next line if necessary */
   gap: 20px; /* This adds some space between the cards */
 }
+
+.card-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

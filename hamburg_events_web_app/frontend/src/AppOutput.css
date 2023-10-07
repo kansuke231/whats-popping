@@ -3400,6 +3400,12 @@ video {
   /* This adds some space between the cards */
 }
 
+.card-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .placeholder\:text-danger::-webkit-input-placeholder {
   --tw-text-opacity: 1;
   color: hsl(var(--nextui-danger) / var(--nextui-danger-opacity, var(--tw-text-opacity)));
