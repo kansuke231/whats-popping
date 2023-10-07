@@ -32,6 +32,11 @@ def get_jsonl_from_s3(bucket_name, date):
             # Split the content by lines and load each line as a JSON
             for line in file_content.strip().split('\n'):
                 data = json.loads(line)
+                
+                # exclude all the wochenmarkt 
+                if 'wochenmarkt' in data.get('title','').lower():
+                    continue
+
                 data_list.append(data)
         except JSONDecodeError:
             print(f'The s3 object {s3_object.key} seems to be empty.')
