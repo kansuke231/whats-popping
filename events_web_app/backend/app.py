@@ -10,7 +10,7 @@ WEB_APP_DIR = os.environ.get('WEB_APP_DIR', Path(__file__).parent.parent)
 app = Flask(__name__, static_folder=os.path.join(WEB_APP_DIR, "frontend/build"))
 
 
-def get_jsonl_from_s3(bucket_name, date):
+def get_jsonl_from_s3(bucket_name, city, date):
     session = boto3.Session(
         aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
         aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
@@ -24,7 +24,7 @@ def get_jsonl_from_s3(bucket_name, date):
 
     data_list = []
 
-    for s3_object in [obj for obj in objects if date in obj.key]:
+    for s3_object in [obj for obj in objects if (city in obj.key) and (date in obj.key)]:
         obj = s3.Object(bucket_name, s3_object.key)
         response = obj.get()
         file_content = response['Body'].read().decode('utf-8')
@@ -54,10 +54,10 @@ def serve(path):
         return send_from_directory(app.static_folder, 'index.html')
 
 
-@app.route('/events/<date>', methods=['GET'])
-def get_events(date):
+@app.route('/events/<city>/<date>', methods=['GET'])
+def get_events(city, date):
 
-    combined_events = get_jsonl_from_s3('chirashi-events', date)
+    combined_events = get_jsonl_from_s3('chirashi-events', city, date)
     return jsonify(combined_events)
     
 

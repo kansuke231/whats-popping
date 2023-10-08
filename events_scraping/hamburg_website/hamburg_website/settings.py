@@ -96,7 +96,7 @@ FEED_EXPORT_ENCODING = "utf-8"
 
 
 FEEDS = {
-    "s3://hamburg-events/%(custom_time)s/%(name)s.jsonl": {
+    "s3://chirashi-events/hamburg/%(custom_time)s/%(name)s.jsonl": {
     "format": "jsonlines",
     }
 }

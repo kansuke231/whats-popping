@@ -2,8 +2,19 @@
 cd hamburg_website
 scrapy crawl hamburg_events
 
+cities=("hamburg" "münchen")
+
 cd ../meetup
-scrapy crawl meetup_spider
+for city in "${cities[@]}"
+do
+   echo "Scraping for $city"
+   scrapy crawl meetup -a city=$city
+done
+
 
 cd ../eventbrite
-scrapy crawl eventbrite_spider
+for city in "${cities[@]}"
+do
+   echo "Scraping for $city"
+   scrapy crawl eventbrite -a city=$city
+done

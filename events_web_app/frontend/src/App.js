@@ -1,35 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import './AppOutput.css';
 
-import {Card, CardHeader, CardBody, Image} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 import { NextUIProvider } from '@nextui-org/react';
 
 function App() {
   const [events, setEvents] = useState([]);
+  const [selectedCity, setSelectedCity] = useState('hamburg'); // Added state for selected city
 
-  const BACKEND_URL =  process.env.REACT_APP_BACKEND_URL|| 'http://127.0.0.1:5000';
+  const BACKEND_URL =  'http://127.0.0.1:5000'; // process.env.REACT_APP_BACKEND_URL ||
 
-  // Define dateStr outside useEffect so it's accessible in the component
   const today = new Date();
   const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   
   useEffect(() => {
-     
-      fetch(`${BACKEND_URL}/events/${dateStr}`)
-          .then(response => response.json())
-          .then(data => {
-              setEvents(data);
-          })
-          .catch(error => {
-              console.error("There was an error fetching the events", error);
-          });
-  }, []);
+    fetch(`${BACKEND_URL}/events/${selectedCity}/${dateStr}`) // Updated with selected city
+        .then(response => response.json())
+        .then(data => {
+            setEvents(data);
+        })
+        .catch(error => {
+            console.error("There was an error fetching the events", error);
+        });
+  }, [selectedCity]); // Updated dependency array
 
 
   return (
     <NextUIProvider>
       <div className="App">
-        <h1>What's popping in Hamburg today? ({dateStr})</h1>
+      <h1>
+          What's popping in 
+          <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)}>
+            <option value="hamburg">Hamburg</option>
+            <option value="münchen">München</option>
+            {/* Add more cities as needed */}
+          </select>
+          today? ({dateStr})
+      </h1>
     
         <div className="cards-container">
           {events.map((event, index) => (

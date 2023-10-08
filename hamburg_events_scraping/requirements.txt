@@ -1,4 +1,0 @@
-Scrapy
-boto3
-botocore
-pendulum

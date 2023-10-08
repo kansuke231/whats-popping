@@ -95,7 +95,7 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
 FEEDS = {
-    "s3://chirashi-events/%(custom_time)s/%(name)s.jsonl": {
+    "s3://chirashi-events/%(city)s/%(custom_time)s/%(name)s.jsonl": {
     "format": "jsonlines",
     }
 }
