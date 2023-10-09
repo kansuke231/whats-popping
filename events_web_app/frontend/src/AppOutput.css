@@ -3406,6 +3406,11 @@ video {
   align-items: center;
 }
 
+.center-text {
+  text-align: center;
+  font-size: 36px;
+}
+
 .placeholder\:text-danger::-webkit-input-placeholder {
   --tw-text-opacity: 1;
   color: hsl(var(--nextui-danger) / var(--nextui-danger-opacity, var(--tw-text-opacity)));

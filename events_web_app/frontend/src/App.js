@@ -8,7 +8,7 @@ function App() {
   const [events, setEvents] = useState([]);
   const [selectedCity, setSelectedCity] = useState('hamburg'); // Added state for selected city
 
-  const BACKEND_URL =  'http://127.0.0.1:5000'; // process.env.REACT_APP_BACKEND_URL ||
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:5000';
 
   const today = new Date();
   const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -28,14 +28,14 @@ function App() {
   return (
     <NextUIProvider>
       <div className="App">
-      <h1>
-          What's popping in 
+      <h1 className="center-text">
+          Today's events in 
           <select value={selectedCity} onChange={e => setSelectedCity(e.target.value)}>
             <option value="hamburg">Hamburg</option>
             <option value="münchen">München</option>
             {/* Add more cities as needed */}
           </select>
-          today? ({dateStr})
+        ({dateStr})
       </h1>
     
         <div className="cards-container">
