@@ -37,6 +37,11 @@ def get_jsonl_from_s3(bucket_name, city, date):
                 if 'wochenmarkt' in data.get('title','').lower():
                     continue
 
+                # exclude all the leadership spams 
+                if 'leadership' in data.get('title','').lower():
+                    continue
+                
+
                 data_list.append(data)
         except JSONDecodeError:
             print(f'The s3 object {s3_object.key} seems to be empty.')
